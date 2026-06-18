@@ -1,4 +1,4 @@
-# Open Brain — Student Edition
+# Open Brain
 
 A personal AI knowledge base you actually own. Write thoughts, ideas, and notes. They save to your own database. Nobody else has access.
 
