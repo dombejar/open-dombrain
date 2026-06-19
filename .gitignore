@@ -2,3 +2,8 @@
 .env.local
 .DS_Store
 node_modules/
+
+# Local working artifacts (not part of the deployable app)
+yt-dlp.exe
+transcripts/
+supabase/.temp/
