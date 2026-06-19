@@ -44,7 +44,13 @@ async function maybeEmail(subject: string, body: string) {
   return res.ok ? "email sent" : `email failed: ${res.status} ${await res.text()}`;
 }
 
-Deno.serve(async () => {
+Deno.serve(async (req) => {
+  // Only this project's own cron job (or you, with the key) may run this agent.
+  const internalKey = Deno.env.get("INTERNAL_KEY") ?? "";
+  if ((req.headers.get("x-internal-key") ?? "") !== internalKey) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   try {
     const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 

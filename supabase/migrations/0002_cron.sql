@@ -16,7 +16,10 @@ select cron.schedule(
   $$
     select net.http_post(
       url := 'https://llkmdkboxbxsfnknhriz.supabase.co/functions/v1/weekly-digest',
-      headers := '{"Content-Type": "application/json"}'::jsonb,
+      headers := jsonb_build_object(
+        'Content-Type', 'application/json',
+        'x-internal-key', (select decrypted_secret from vault.decrypted_secrets where name = 'internal_key')
+      ),
       body := '{}'::jsonb
     );
   $$
