@@ -45,6 +45,12 @@ async function enrich(content: string) {
 }
 
 Deno.serve(async (req) => {
+  // Only this project's own database trigger may call this agent.
+  const internalKey = Deno.env.get("INTERNAL_KEY") ?? "";
+  if ((req.headers.get("x-internal-key") ?? "") !== internalKey) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   try {
     const payload = await req.json();
     // Database webhooks/triggers send the new row under "record".

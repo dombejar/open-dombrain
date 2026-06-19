@@ -22,7 +22,10 @@ as $$
 begin
   perform net.http_post(
     url := 'https://llkmdkboxbxsfnknhriz.supabase.co/functions/v1/enrich-thought',
-    headers := '{"Content-Type": "application/json"}'::jsonb,
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'x-internal-key', (select decrypted_secret from vault.decrypted_secrets where name = 'internal_key')
+    ),
     body := jsonb_build_object('record', to_jsonb(NEW))
   );
   return NEW;
